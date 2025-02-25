@@ -4,6 +4,11 @@
   3. Make it interactive
 */
 
+// Modules - import the cart array from the data/cart.js file
+// Note: the type="module" attribute in the script tag in the HTML file allows us to use the import and export keywords
+// Note: imports must go at the top of the file
+import { cart } from "../data/cart.js"; // Reminder that '..' means to go up one level in the directory structure
+
 /**************************************
  * Step 1: Save the data from HTML
  **************************************/
