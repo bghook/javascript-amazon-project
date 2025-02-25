@@ -74,17 +74,49 @@ products.forEach((product) => {
             Added
           </div>
 
-          <button class="add-to-cart-button button-primary">Add to Cart</button>
+          <button class="add-to-cart-button button-primary js-add-to-cart"
+          data-product-id="${product.id}">Add to Cart</button>
         </div>`;
-
-  console.log(productsHTML);
 });
 
-/**************************************
- * Step 3: Make it interactive
- **************************************/
-// In this step, we'll use the DOM to put the combined HTML on the page
+// Use the DOM to put the combined HTML on the page
 // Note that the webpage won't look any different than it did before (when the HTML was in our html file) - the difference is that we're using JavaScript to generate the HTML
 // This is useful because it allows us to generate HTML dynamically based on data, rather than having to write out all the HTML ourselves
 // This is especially useful when we have a lot of data to display, or when the data changes frequently
 document.querySelector(".js-products-grid").innerHTML = productsHTML;
+
+/**************************************
+ * Step 3: Make it interactive
+ **************************************/
+// First, we can add an event listener to each "Add to Cart" button
+document.querySelectorAll(".js-add-to-cart").forEach((button) => {
+  button.addEventListener("click", () => {
+    // Here, we want a function that adds a product to the cart
+    // To get the id of each product dynamically, we'll use the 'data-product-id' attribute we added to each button
+    // Data attributes are just like other HTML attributes, but they're meant to store data and have their own syntax (data-attribute-name)
+    // The purpose of a data attribute is that we can attach any information to an element (i.e. a product's id, name, image, etc.) and then access that information with JavaScript
+    // We can access the data attributes attached to an element using the 'dataset' property
+    const productId = button.dataset.productId; // Notice that the id gets converted from kebab-case to camelCase (data-product-id -> dataset.productId)
+
+    let matchingItem;
+    // We'll also perform a check for quantity - if the product is already in the cart, we'll increase the quantity by 1; else, we'll add the product to the cart
+    // The item parameter below will contain a product name and quantity
+    cart.forEach((item) => {
+      if (productId === item.productId) {
+        matchingItem = item;
+      }
+    });
+
+    if (matchingItem) {
+      matchingItem.quantity++;
+    } else {
+      // To add the product to the cart, we'll use an object because we want 2 pieces of information: the product name and the quantity
+      cart.push({
+        productId: productId,
+        quantity: 1,
+      });
+    }
+
+    console.log(cart);
+  });
+});

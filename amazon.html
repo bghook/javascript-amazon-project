@@ -60,11 +60,13 @@
     </div>
 
     <!-- Scripts are run in order from top to bottom. -->
-    <!-- The first script generates all the products. -->
     <!-- KEY POINT: In JavaScript, variables and functions declared in a script file have GLOBAL SCOPE when that script file is included in an HTML file -->
     <!-- This means we can access the products array in the products.js file from the amazon.js file -->
+    <!-- The first script handles the shopping cart -->
+    <script src="data/cart.js"></script>
+    <!-- The second script generates all the products -->
     <script src="data/products.js"></script>
-    <!-- The second script adds the products to the page. -->
+    <!-- The third script adds the products to the page -->
     <script src="scripts/amazon.js"></script>
   </body>
 </html>
