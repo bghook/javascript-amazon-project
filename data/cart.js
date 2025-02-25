@@ -16,16 +16,30 @@
 */
 
 // Best practice in JavaScript is to group related code together - we moved the addToCart function to the cart.js file because it's related to the cart
-export let cart = [
-  {
-    productId: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
-    quantity: 2,
-  },
-  {
-    productId: "15b6fc6f-327a-4ec4-896f-486349e85a3d",
-    quantity: 1,
-  },
-];
+// getItem() takes 1 string - the name of the data we want to retrieve, which in this case is the string representation of the cart array which was saved via saveToStorage()
+// However, remember that local storage can only store strings, so we need to convert the string back to an array using JSON.parse()
+export let cart = JSON.parse(localStorage.getItem("cart"));
+
+// If there's no cart in local storage (i.e. the cart is empty), we'll give the cart a default value below
+if (!cart) {
+  cart = [
+    {
+      productId: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
+      quantity: 2,
+    },
+    {
+      productId: "15b6fc6f-327a-4ec4-896f-486349e85a3d",
+      quantity: 1,
+    },
+  ];
+}
+
+function saveToStorage() {
+  // setItem() method stores the data in the local storage
+  // Remember that local storage can only store strings! So we need to convert our cart array to a string using JSON.stringify()
+  // setItem() takes 2 strings: the name of whatever we want to save, and the data that we want to save
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
 
 export function addToCart(productId) {
   let matchingItem;
@@ -46,17 +60,23 @@ export function addToCart(productId) {
       quantity: 1,
     });
   }
+
+  saveToStorage();
 }
 
 export function removeFromCart(productId) {
   // One way to approach this function is to create a new cart array, loop through the existing cart array, and if current product is not the one we want to remove, add it to the new cart array
   const newCart = [];
+
   cart.forEach((cartItem) => {
     if (cartItem.productId !== productId) {
       newCart.push(cartItem);
     }
   });
+
   cart = newCart;
+
+  saveToStorage();
 
   // An alternative way to approach this function is to use the filter method
   // The filter method creates a new array with all elements that pass the test implemented by the provided function

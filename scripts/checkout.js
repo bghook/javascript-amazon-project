@@ -31,7 +31,7 @@ cart.forEach((cartItem) => {
   // Note: when using radio buttons, we need to give each set of radio buttons a unique name
   // Any radio buttons that share the same name will be part of the same group, and only one radio button in the group can be selected at a time
   cartSummaryHTML += `
-  <div class="cart-item-container">
+  <div class="cart-item-container js-cart-item-container-${matchingProduct.id}">
             <div class="delivery-date">Delivery date: Tuesday, June 21</div>
 
             <div class="cart-item-details-grid">
@@ -117,8 +117,13 @@ document.querySelectorAll(".js-delete-link").forEach((link) => {
     //  - We can get the product ID from the data-product-id attribute on the delete link
     const productId = link.dataset.productId;
     removeFromCart(productId);
-    console.log(cart);
 
     // Step 2: Update the HTML to remove the product from the checkout page
+    // To do this, we'll first need to add a special class to the cart item container so we can easily find and remove it
+    // We'll then use the DOM to find the cart item container and remove it using the remove() method
+    const container = document.querySelector(
+      `.js-cart-item-container-${productId}`
+    );
+    container.remove(); // This will take the cart item that we grabbed using the DOM above and remove it from the page
   });
 });
