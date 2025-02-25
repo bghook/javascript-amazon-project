@@ -10,6 +10,7 @@
 // Note: 'import * as moduleName' allows us to import all the variables and methods from a file and access them using the moduleName.variableName or moduleName.methodName syntax
 import { cart, addToCart } from "../data/cart.js"; // Reminder that '..' means to go up one level in the directory structure
 import { products } from "../data/products.js";
+import { formatCurrency } from "./utils/money.js";
 
 /**************************************
  * Step 1: Save the data from HTML
@@ -55,9 +56,8 @@ products.forEach((product) => {
             }</div>
           </div>
 
-          <div class="product-price">${(product.priceCents / 100).toFixed(
-            2
-          )}</div>
+          <div class="product-price">$${formatCurrency(product.priceCents)}
+          </div>
 
           <div class="product-quantity-container">
             <select>

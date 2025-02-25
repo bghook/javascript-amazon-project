@@ -16,7 +16,7 @@
 */
 
 // Best practice in JavaScript is to group related code together - we moved the addToCart function to the cart.js file because it's related to the cart
-export const cart = [
+export let cart = [
   {
     productId: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
     quantity: 2,
@@ -46,4 +46,21 @@ export function addToCart(productId) {
       quantity: 1,
     });
   }
+}
+
+export function removeFromCart(productId) {
+  // One way to approach this function is to create a new cart array, loop through the existing cart array, and if current product is not the one we want to remove, add it to the new cart array
+  const newCart = [];
+  cart.forEach((cartItem) => {
+    if (cartItem.productId !== productId) {
+      newCart.push(cartItem);
+    }
+  });
+  cart = newCart;
+
+  // An alternative way to approach this function is to use the filter method
+  // The filter method creates a new array with all elements that pass the test implemented by the provided function
+  // cart = cart.filter((cartItem) => {
+  //   return cartItem.productId !== productId;
+  // });
 }

@@ -1,10 +1,16 @@
+/**************************************
+ * checkout.js
+ * This script loops through the cart and generates the HTML for the cart items
+ * It then sets the innerHTML of the .js-order-summary element to the generated HTML
+ **************************************/
 /* Main idea of JavaScript
   1. Save the data
   2. Generate the HTML
   3. Make it interactive
 */
-import { cart } from "../data/cart.js";
-import { products } from "../data/products.js";
+import { cart, removeFromCart } from "../data/cart.js";
+import { products } from "../data/products.js"; // '..' means to go up one level in the directory structure
+import { formatCurrency } from "./utils/money.js"; // '.' means to stay in the same directory
 
 // Each time we loop through the cart, we'll add the HTML here so we combine it all together
 let cartSummaryHTML = "";
@@ -22,6 +28,8 @@ cart.forEach((cartItem) => {
     }
   });
 
+  // Note: when using radio buttons, we need to give each set of radio buttons a unique name
+  // Any radio buttons that share the same name will be part of the same group, and only one radio button in the group can be selected at a time
   cartSummaryHTML += `
   <div class="cart-item-container">
             <div class="delivery-date">Delivery date: Tuesday, June 21</div>
@@ -36,9 +44,9 @@ cart.forEach((cartItem) => {
                 <div class="product-name">
                   ${matchingProduct.name}
                 </div>
-                <div class="product-price">$${
-                  matchingProduct.priceCents / 100
-                }</div>
+                <div class="product-price">$${formatCurrency(
+                  matchingProduct.priceCents
+                )}</div>
                 <div class="product-quantity">
                   <span> Quantity: <span class="quantity-label">${
                     cartItem.quantity
@@ -46,7 +54,9 @@ cart.forEach((cartItem) => {
                   <span class="update-quantity-link link-primary">
                     Update
                   </span>
-                  <span class="delete-quantity-link link-primary">
+                  <span class="delete-quantity-link link-primary js-delete-link" data-product-id="${
+                    matchingProduct.id
+                  }">
                     Delete
                   </span>
                 </div>
@@ -61,7 +71,7 @@ cart.forEach((cartItem) => {
                     type="radio"
                     checked
                     class="delivery-option-input"
-                    name="delivery-option-1"
+                    name="delivery-option-${matchingProduct.id}"
                   />
                   <div>
                     <div class="delivery-option-date">Tuesday, June 21</div>
@@ -72,7 +82,7 @@ cart.forEach((cartItem) => {
                   <input
                     type="radio"
                     class="delivery-option-input"
-                    name="delivery-option-1"
+                    name="delivery-option-${matchingProduct.id}"
                   />
                   <div>
                     <div class="delivery-option-date">Wednesday, June 15</div>
@@ -83,7 +93,7 @@ cart.forEach((cartItem) => {
                   <input
                     type="radio"
                     class="delivery-option-input"
-                    name="delivery-option-1"
+                    name="delivery-option-${matchingProduct.id}"
                   />
                   <div>
                     <div class="delivery-option-date">Monday, June 13</div>
@@ -94,4 +104,21 @@ cart.forEach((cartItem) => {
             </div>
           </div>
   `;
+});
+
+// Use the DOM to put the combined HTML on the page
+document.querySelector(".js-order-summary").innerHTML = cartSummaryHTML;
+
+// Use the DOM to add event listeners to the delete links
+document.querySelectorAll(".js-delete-link").forEach((link) => {
+  link.addEventListener("click", () => {
+    // Step 1: Remove product from cart
+    //  - In order to remove a product from the cart, we need to know the product ID
+    //  - We can get the product ID from the data-product-id attribute on the delete link
+    const productId = link.dataset.productId;
+    removeFromCart(productId);
+    console.log(cart);
+
+    // Step 2: Update the HTML to remove the product from the checkout page
+  });
 });
