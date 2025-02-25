@@ -59,6 +59,12 @@
       <div class="products-grid js-products-grid"></div>
     </div>
 
+    <!-- Scripts are run in order from top to bottom. -->
+    <!-- The first script generates all the products. -->
+    <!-- KEY POINT: In JavaScript, variables and functions declared in a script file have GLOBAL SCOPE when that script file is included in an HTML file -->
+    <!-- This means we can access the products array in the products.js file from the amazon.js file -->
+    <script src="data/products.js"></script>
+    <!-- The second script adds the products to the page. -->
     <script src="scripts/amazon.js"></script>
   </body>
 </html>

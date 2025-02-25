@@ -5,40 +5,10 @@
 */
 
 /**************************************
- * Step 1: Save the data from HTMl
+ * Step 1: Save the data from HTML
  **************************************/
 // Use an object to represent each product - an object lets us group multiple values together (like a product's name, price, and image)
 // Note: make sure all the objects in the array have the same structure (same properties) - this allows our code to handle each object in the same way
-const products = [
-  {
-    image: "images/products/athletic-cotton-socks-6-pairs.jpg",
-    name: "Black and Gray Athletic Cotton Socks - 6 Pairs",
-    rating: {
-      // Save rating as an object because it contains 2 components: star rating and count of reviews
-      stars: 4.5,
-      count: 87,
-    },
-    priceCents: 1090, // Remember, best practice when calculating money is to calculate in cents rather than dollars (due to JavaScript issues with floating point numbers)
-  },
-  {
-    image: "images/products/intermediate-composite-basketball.jpg",
-    name: "Intermediate Size Basketball",
-    rating: {
-      stars: 4,
-      count: 127,
-    },
-    priceCents: 2095,
-  },
-  {
-    image: "images/products/adults-plain-cotton-tshirt-2-pack-teal.jpg",
-    name: "Adults Plain Cotton T-Shirt - 2 Pack",
-    rating: {
-      stars: 4.5,
-      count: 56,
-    },
-    priceCents: 799,
-  },
-];
 
 // Declare a variable for combining HTML for products together outside of the loop
 let productsHTML = "";
@@ -48,6 +18,8 @@ let productsHTML = "";
  **************************************/
 // To generate the HTML, we can loop through the products array and create a string of HTML for each product
 // We can then insert this HTML into the page
+// KEY POINT: The benefit of generating the HTML this way is that, if we want to add a new product, all we have to do is add it to the products array - the HTML will be generated automatically
+// This is much easier than having to manually add the HTML for each product to the page
 products.forEach((product) => {
   // Inside the template string below, we're basically going to copy all the HTML for each product
   // Notice the use of double dot notation to access the stars property of the rating object, which is a property of the product object (product.rating.stars)
