@@ -117,6 +117,13 @@ document.querySelectorAll(".js-add-to-cart").forEach((button) => {
       });
     }
 
-    console.log(cart);
+    // Calculate the total size of the cart
+    let cartQuantity = 0;
+    cart.forEach((item) => {
+      cartQuantity += item.quantity;
+    });
+
+    // Using the DOM, get the cart quantity element and update the text to show the total size of the cart on the webpage
+    document.querySelector(".js-cart-quantity").innerHTML = cartQuantity;
   });
 });
