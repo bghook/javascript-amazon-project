@@ -62,12 +62,14 @@
     <!-- Scripts are run in order from top to bottom. -->
     <!-- KEY POINT: In JavaScript, variables and functions declared in a script file have GLOBAL SCOPE when that script file is included in an HTML file -->
     <!-- This means we can access the products array in the products.js file from the amazon.js file -->
-    <!-- The first script handles the shopping cart -->
-    <script src="data/cart.js"></script>
-    <!-- The second script generates all the products -->
-    <script src="data/products.js"></script>
+    <!-- The first script handles the shopping cart (replaced using modules) -->
+    <!-- <script src="data/cart.js"></script> -->
+    <!-- The second script generates all the products (replaced using modules) -->
+    <!-- <script src="data/products.js"></script> -->
     <!-- The third script adds the products to the page -->
     <!-- The type="module" attribute basically lets this file get variables out of other files -->
+    <!-- After utilizing modules, we still need 1 JS file to load our code - the file below will import from all the other files we created -->
+    <!-- This is known as the ENTRY POINT -->
     <script type="module" src="scripts/amazon.js"></script>
   </body>
 </html>

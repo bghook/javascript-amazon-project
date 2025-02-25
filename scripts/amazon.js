@@ -7,7 +7,9 @@
 // Modules - import the cart array from the data/cart.js file
 // Note: the type="module" attribute in the script tag in the HTML file allows us to use the import and export keywords
 // Note: imports must go at the top of the file
-import { cart } from "../data/cart.js"; // Reminder that '..' means to go up one level in the directory structure
+// Note: 'import * as moduleName' allows us to import all the variables and methods from a file and access them using the moduleName.variableName or moduleName.methodName syntax
+import { cart, addToCart } from "../data/cart.js"; // Reminder that '..' means to go up one level in the directory structure
+import { products } from "../data/products.js";
 
 /**************************************
  * Step 1: Save the data from HTML
@@ -90,6 +92,18 @@ products.forEach((product) => {
 // This is especially useful when we have a lot of data to display, or when the data changes frequently
 document.querySelector(".js-products-grid").innerHTML = productsHTML;
 
+// This function is not moved to cart.js because it is specific to the Amazon page (updating the display of the cart quantity on the Amazon page)
+function updateCartQuantity() {
+  // Calculate the total size of the cart
+  let cartQuantity = 0;
+  cart.forEach((cartItem) => {
+    cartQuantity += cartItem.quantity;
+  });
+
+  // Using the DOM, get the cart quantity element and update the text to show the total size of the cart on the webpage
+  document.querySelector(".js-cart-quantity").innerHTML = cartQuantity;
+}
+
 /**************************************
  * Step 3: Make it interactive
  **************************************/
@@ -103,32 +117,10 @@ document.querySelectorAll(".js-add-to-cart").forEach((button) => {
     // We can access the data attributes attached to an element using the 'dataset' property
     const productId = button.dataset.productId; // Notice that the id gets converted from kebab-case to camelCase (data-product-id -> dataset.productId)
 
-    let matchingItem;
-    // We'll also perform a check for quantity - if the product is already in the cart, we'll increase the quantity by 1; else, we'll add the product to the cart
-    // The item parameter below will contain a product name and quantity
-    cart.forEach((item) => {
-      if (productId === item.productId) {
-        matchingItem = item;
-      }
-    });
+    // Add the selected product to the cart, passing in the product id
+    addToCart(productId);
 
-    if (matchingItem) {
-      matchingItem.quantity++;
-    } else {
-      // To add the product to the cart, we'll use an object because we want 2 pieces of information: the product name and the quantity
-      cart.push({
-        productId: productId,
-        quantity: 1,
-      });
-    }
-
-    // Calculate the total size of the cart
-    let cartQuantity = 0;
-    cart.forEach((item) => {
-      cartQuantity += item.quantity;
-    });
-
-    // Using the DOM, get the cart quantity element and update the text to show the total size of the cart on the webpage
-    document.querySelector(".js-cart-quantity").innerHTML = cartQuantity;
+    // Update the cart quantity
+    updateCartQuantity();
   });
 });
