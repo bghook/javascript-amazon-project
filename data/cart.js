@@ -26,10 +26,12 @@ if (!cart) {
     {
       productId: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
       quantity: 2,
+      deliveryOptionId: "1",
     },
     {
       productId: "15b6fc6f-327a-4ec4-896f-486349e85a3d",
       quantity: 1,
+      deliveryOptionId: "2",
     },
   ];
 }
@@ -58,6 +60,7 @@ export function addToCart(productId) {
     cart.push({
       productId: productId,
       quantity: 1,
+      deliveryOptionId: "1", // New products added to cart will select delivery option 1 by default
     });
   }
 
@@ -83,4 +86,26 @@ export function removeFromCart(productId) {
   // cart = cart.filter((cartItem) => {
   //   return cartItem.productId !== productId;
   // });
+}
+
+export function updateDeliveryOption(productId, deliveryOptionId) {
+  // When we update a delivery option, we need to know:
+  //  1. The product we want to update (the product ID)
+  //  2. The delivery option that was chosen (the delivery option ID)
+
+  // First, we'll loop through the cart and find the product
+  // We already had code that accomplishes this written in the addToCart function, so we'll reuse that code here
+  // The code below will find the product in the cart that matches the productId and save it in the matchingItem variable
+  let matchingItem;
+  cart.forEach((cartItem) => {
+    if (productId === cartItem.productId) {
+      matchingItem = cartItem;
+    }
+  });
+
+  // Second, we'll update the deliveryOptionId of that product
+  matchingItem.deliveryOptionId = deliveryOptionId;
+
+  // Since we updated the cart, we need to save it to local storage
+  saveToStorage();
 }
