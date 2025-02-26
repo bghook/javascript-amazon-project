@@ -25,14 +25,7 @@ import {
   deliveryOptions,
   getDeliveryOption,
 } from "../../data/deliveryOptions.js";
-
-hello();
-
-const today = dayjs();
-const deliveryDate = today.add(7, "days");
-// The format below specifies the full name of the day of the week, full name of month, and the day of the month as a number
-// More details can be found in the DayJS documentation
-deliveryDate.format("dddd, MMMM D");
+import { renderPaymentSummary } from "./paymentSummary.js";
 
 /**************************************
  * MODEL-VIEW-CONTROLLER (MVC)
@@ -170,7 +163,7 @@ export function renderOrderSummary() {
       //  - In order to remove a product from the cart, we need to know the product ID
       //  - We can get the product ID from the data-product-id attribute on the delete link
       const productId = link.dataset.productId;
-      removeFromCart(productId);
+      removeFromCart(productId); // MVC - Update the data by deleting the product from the cart (Model)
 
       // Step 2: Update the HTML to remove the product from the checkout page
       // To do this, we'll first need to add a special class to the cart item container so we can easily find and remove it
@@ -179,6 +172,8 @@ export function renderOrderSummary() {
         `.js-cart-item-container-${productId}`
       );
       container.remove(); // This will take the cart item that we grabbed using the DOM above and remove it from the page
+
+      renderPaymentSummary(); // MVC - Update the payment summary (View) to reflect the changes in the cart (Model)
     });
   });
 
@@ -194,8 +189,9 @@ export function renderOrderSummary() {
       // const deliveryOptionId = element.dataset.deliveryOptionId;
 
       // Step 2: Update the page
-      updateDeliveryOption(productId, deliveryOptionId);
-      renderOrderSummary(); // The renderOrderSummary function is called again to update the delivery date displayed on the checkout page
+      updateDeliveryOption(productId, deliveryOptionId); // MVC - Update the data by changing the delivery option in the cart (Model)
+      renderOrderSummary(); // MVC - The renderOrderSummary function is called again to update the delivery date displayed on the checkout page (Update the View)
+      renderPaymentSummary(); // MVC - Update the payment summary (View) to reflect the changes in the cart
     });
   });
 }
