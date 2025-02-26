@@ -1,3 +1,16 @@
+export function getProduct(productId) {
+  // Search for the matching product in the products array
+  // Once we find the matching product, we'll have access to the product's name, price, and image - we can use this information to generate the HTML for the cart item
+  let matchingProduct;
+  products.forEach((product) => {
+    if (product.id === productId) {
+      matchingProduct = product;
+    }
+  });
+
+  return matchingProduct;
+}
+
 export const products = [
   {
     id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",

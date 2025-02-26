@@ -16,3 +16,18 @@ export const deliveryOptions = [
     priceCents: 999,
   },
 ];
+
+export function getDeliveryOption(deliveryOptionId) {
+  // Search for the matching delivery option in the deliveryOptions array above
+  // Once we find the matching delivery option, we can use it to get the deliveryDays property and calculate the delivery date that we need to display on the checkout page
+  let deliveryOption;
+
+  deliveryOptions.forEach((option) => {
+    if (option.id === deliveryOptionId) {
+      deliveryOption = option;
+    }
+  });
+
+  // Return delivery option or the default option (standard delivery) if none is found
+  return deliveryOption || deliveryOptions[0];
+}

@@ -9,7 +9,7 @@
   3. Make it interactive
 */
 import { cart, removeFromCart, updateDeliveryOption } from "../../data/cart.js";
-import { products } from "../../data/products.js"; // '..' means to go up one level in the directory structure
+import { products, getProduct } from "../../data/products.js"; // '..' means to go up one level in the directory structure
 import { formatCurrency } from "../utils/money.js"; // '.' means to stay in the same directory
 // An external library is simply code that is outside our project
 // External libraries allow us to share code and avoid unnecessary work (reinventing the wheel)
@@ -21,7 +21,10 @@ import { hello } from "https://unpkg.com/supersimpledev@1.0.1/hello.esm.js";
 // Each file can only have 1 default export
 // The syntax using curly braces for imports is called a 'named export'
 import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
-import { deliveryOptions } from "../../data/deliveryOptions.js";
+import {
+  deliveryOptions,
+  getDeliveryOption,
+} from "../../data/deliveryOptions.js";
 
 hello();
 
@@ -53,23 +56,14 @@ export function renderOrderSummary() {
 
     // Search for the matching product in the products array
     // Once we find the matching product, we'll have access to the product's name, price, and image - we can use this information to generate the HTML for the cart item
-    let matchingProduct;
-    products.forEach((product) => {
-      if (product.id === productId) {
-        matchingProduct = product;
-      }
-    });
+    // getProduct is a function from the products.js file that takes a productId and returns the matching product object from the products array
+    const matchingProduct = getProduct(productId);
 
     const deliveryOptionId = cartItem.deliveryOptionId;
 
     // Search for the matching delivery option in the deliveryOptions array
     // Once we find the matching delivery option, we can use it to get the deliveryDays property and calculate the delivery date that we need to display on the checkout page
-    let deliveryOption;
-    deliveryOptions.forEach((option) => {
-      if (option.id === deliveryOptionId) {
-        deliveryOption = option;
-      }
-    });
+    const deliveryOption = getDeliveryOption(deliveryOptionId);
 
     // Take the deliveryOption that we found above and use it to format the delivery date which we'll insert into the HTML
     // Combined with the code above, this will display the correct delivery date for each item in the cart based on which delivery option is selected (in green letters above product image)
