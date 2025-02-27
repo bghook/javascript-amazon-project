@@ -19,6 +19,17 @@ import { formatCurrency } from "../scripts/utils/money.js";
 // Best practice dictates grouping related test cases together
 // A group of related tests is called a test suite
 
+/**************************************
+ * TESTING FRAMEWORKS
+ **************************************/
+// A testing framework is a library that helps you write test cases
+// We have 3 main goals for automated testing, and a testing framework helps us accomplish all 3:
+//  1. Create test suite
+//  2. Create tests
+//  3. Compare values and display result
+// For this project, we'll use Jasmine, a popular testing framework
+// Jasmine is a behavior-driven development framework for testing JavaScript code
+
 console.log("Test Suite: formatCurrency");
 
 // Basic test case
