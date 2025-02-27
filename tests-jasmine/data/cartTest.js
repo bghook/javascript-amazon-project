@@ -1,11 +1,15 @@
-import { addToCart, cart, loadFromStorage } from "../../data/cart.js";
+import {
+  addToCart,
+  cart,
+  loadFromStorage,
+  resetCart,
+} from "../../data/cart.js";
 
 // Create a new test suite in Jasmine by using describe()
 describe("Test Suite: addToCart", () => {
   // A best practice in testing is to test each condition of an if-statement
   // This is known as "Test Coverage" - how much of the code is being tested
   // We try to maximize test coverage
-
   // Test 1: When the product is already in the cart
   it("Adds an existing product to the cart", () => {
     spyOn(localStorage, "setItem");

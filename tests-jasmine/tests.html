@@ -16,6 +16,12 @@
     <script src="lib/jasmine-5.1.1/boot0.js"></script>
     <!-- optional: include a file here that configures the Jasmine env -->
     <script src="lib/jasmine-5.1.1/boot1.js"></script>
+    <!-- This will ensure a fresh test environment on each page load -->
+    <!-- <script>
+      window.addEventListener("beforeunload", () => {
+        localStorage.clear();
+      });
+    </script> -->
 
     <!-- include source files here (the files we want to test) -->
     <!-- <script src="yourJavaScriptFileHere.js"></script> -->
@@ -23,7 +29,10 @@
     <!-- include spec files here (these files contain the tests) -->
     <script src="utils/moneyTest.js" type="module"></script>
     <script src="data/cartTest.js" type="module"></script>
+    <script src="checkout/orderSummaryTest.js" type="module"></script>
   </head>
 
-  <body></body>
+  <body>
+    <div class="js-test-container"></div>
+  </body>
 </html>

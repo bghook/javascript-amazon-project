@@ -21,6 +21,10 @@ export let cart;
 // This function needs to run at least once when we load this file
 loadFromStorage();
 
+export function resetCart() {
+  cart = [];
+}
+
 export function loadFromStorage() {
   // getItem() takes 1 string - the name of the data we want to retrieve, which in this case is the string representation of the cart array which was saved via saveToStorage()
   // However, remember that local storage can only store strings, so we need to convert the string back to an array using JSON.parse()
@@ -61,7 +65,7 @@ export function addToCart(productId) {
   });
 
   if (matchingItem) {
-    matchingItem.quantity++;
+    matchingItem.quantity += 1;
   } else {
     // To add the product to the cart, we'll use an object because we want 2 pieces of information: the product name and the quantity
     cart.push({
