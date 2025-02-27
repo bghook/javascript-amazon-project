@@ -16,24 +16,31 @@
 */
 
 // Best practice in JavaScript is to group related code together - we moved the addToCart function to the cart.js file because it's related to the cart
-// getItem() takes 1 string - the name of the data we want to retrieve, which in this case is the string representation of the cart array which was saved via saveToStorage()
-// However, remember that local storage can only store strings, so we need to convert the string back to an array using JSON.parse()
-export let cart = JSON.parse(localStorage.getItem("cart"));
+export let cart;
 
-// If there's no cart in local storage (i.e. the cart is empty), we'll give the cart a default value below
-if (!cart) {
-  cart = [
-    {
-      productId: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
-      quantity: 2,
-      deliveryOptionId: "1",
-    },
-    {
-      productId: "15b6fc6f-327a-4ec4-896f-486349e85a3d",
-      quantity: 1,
-      deliveryOptionId: "2",
-    },
-  ];
+// This function needs to run at least once when we load this file
+loadFromStorage();
+
+export function loadFromStorage() {
+  // getItem() takes 1 string - the name of the data we want to retrieve, which in this case is the string representation of the cart array which was saved via saveToStorage()
+  // However, remember that local storage can only store strings, so we need to convert the string back to an array using JSON.parse()
+  cart = JSON.parse(localStorage.getItem("cart"));
+
+  // If there's no cart in local storage (i.e. the cart is empty), we'll give the cart a default value below
+  if (!cart) {
+    cart = [
+      {
+        productId: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
+        quantity: 2,
+        deliveryOptionId: "1",
+      },
+      {
+        productId: "15b6fc6f-327a-4ec4-896f-486349e85a3d",
+        quantity: 1,
+        deliveryOptionId: "2",
+      },
+    ];
+  }
 }
 
 function saveToStorage() {
