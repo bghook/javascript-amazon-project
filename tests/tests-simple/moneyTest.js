@@ -2,7 +2,7 @@
  * moneyTest.js
  * Automated tests for the money.js module
  **************************************/
-import { formatCurrency } from "../scripts/utils/money.js";
+import { formatCurrency } from "../../scripts/utils/money.js";
 
 /**************************************
  * AUTOMATED TESTING
