@@ -1,3 +1,5 @@
+import { formatCurrency } from "../scripts/utils/money.js";
+
 export function getProduct(productId) {
   // Search for the matching product in the products array
   // Once we find the matching product, we'll have access to the product's name, price, and image - we can use this information to generate the HTML for the cart item
@@ -11,6 +13,43 @@ export function getProduct(productId) {
   return matchingProduct;
 }
 
+class Product {
+  /**************************************
+   * PROPERTIES
+   **************************************/
+  id;
+  image;
+  name;
+  rating;
+  priceCents;
+
+  /**************************************
+   * METHODS
+   **************************************/
+  // Pass in the product details as an object
+  // This is converting an object into a class - classes have extra features we can use
+  constructor(productDetails) {
+    this.id = productDetails.id;
+    this.image = productDetails.image;
+    this.name = productDetails.name;
+    this.rating = productDetails.rating;
+    this.priceCents = productDetails.priceCents;
+  }
+
+  // This method will return the URL of the image for the product's rating (used in amazon.js)
+  getStarsUrl() {
+    return `images/ratings/rating-${this.rating.stars * 10}.png`;
+  }
+
+  // This method will return the price of current item (used in amazon.js and orderSummary.js)
+  getPrice() {
+    return `$${formatCurrency(this.priceCents)}`;
+  }
+}
+
+// We'll use the array method map() to convert each product object in the array into an instance of the Product class
+// The map() method creates a NEW array populated with the results of calling a provided function on every element in the calling array
+// The parameter passed into map() is the current product object
 export const products = [
   {
     id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
@@ -482,4 +521,8 @@ export const products = [
     priceCents: 2400,
     keywords: ["sweaters", "hoodies", "apparel", "mens"],
   },
-];
+].map((productDetails) => {
+  // Convert the object into an instance of the Product class
+  // Don't forget that map() creates a new array, so we need a return statement
+  return new Product(productDetails);
+});
