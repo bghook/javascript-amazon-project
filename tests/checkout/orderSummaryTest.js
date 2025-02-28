@@ -1,5 +1,6 @@
 import { renderOrderSummary } from "../../scripts/checkout/orderSummary.js";
 import { loadFromStorage, cart, resetCart } from "../../data/cart.js";
+import { loadProducts } from "../../data/products.js";
 
 // renderOrderSummary updates the checkout page
 // So there are 2 things we'll want to test:
@@ -17,6 +18,19 @@ describe("Test Suite: renderOrderSummary", () => {
   // The beforeEach() hook runs before each test
   // This provides a way to share setup code between tests and reduce duplication
   // In this case, we'll use beforeEach() to set up the HTML for each test
+
+  /**************************************
+   * TESTING WITH A BACKEND
+   **************************************/
+  // done is a function provided by Jasmine
+  // When we add it as a parameter to the beforeAll hook, Jasmine will wait for done() to be called before continuing the tests
+  beforeAll((done) => {
+    // Load products before all tests
+    loadProducts(() => {
+      done();
+    });
+  });
+
   beforeEach(() => {
     spyOn(localStorage, "setItem");
 
@@ -44,21 +58,21 @@ describe("Test Suite: renderOrderSummary", () => {
     renderOrderSummary();
   });
 
-  // Cleanup after each test (this runs even if tests fail)
-  afterEach(() => {
-    try {
-      // Clean up the DOM
-      const testContainer = document.querySelector(".js-test-container");
-      if (testContainer) {
-        testContainer.innerHTML = "";
-      }
+  // // Cleanup after each test (this runs even if tests fail)
+  // afterEach(() => {
+  //   try {
+  //     // Clean up the DOM
+  //     const testContainer = document.querySelector(".js-test-container");
+  //     if (testContainer) {
+  //       testContainer.innerHTML = "";
+  //     }
 
-      // Reset cart state
-      resetCart();
-    } catch (error) {
-      console.error("Cleanup error:", error);
-    }
-  });
+  //     // Reset cart state
+  //     resetCart();
+  //   } catch (error) {
+  //     console.error("Cleanup error:", error);
+  //   }
+  // });
 
   it("Displays the cart", () => {
     // Use DOM to check if correct number of items are displayed
