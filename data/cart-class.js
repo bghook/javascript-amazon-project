@@ -9,8 +9,14 @@
 class Cart {
   // Note that classes have a different syntax than objects
   // Here we define properties in the traditional way, not with property:value pairs
-  cartItems; // Note that this is a shorthand syntax for initializing the property as undefined (i.e. cartItems = undefined)
-  localStorageKey; // Make localStorageKey a property of the class
+  cartItems; // Note that cartItems does not have a # in front of it, so it is a public property - it can be accessed from outside the class
+
+  /**************************************
+   * PRIVATE PROPERTIES
+   **************************************/
+  // Private properties and methods are only accessible within the class
+  // We made localStorageKey a property of the Cart class, and we made it private by adding a # in front of the property name
+  #localStorageKey;
 
   // The constructor() method is a special method for creating and initializing an object created with a class
   // The constructor() method is called automatically when a new object is created
@@ -18,15 +24,20 @@ class Cart {
   // This is a great place to put our setup code
   // Note that the constructor should not return anything
   constructor(localStorageKey) {
-    this.localStorageKey = localStorageKey;
+    this.#localStorageKey = localStorageKey;
 
     // This function needs to run at least once when we load this file
-    this.loadFromStorage();
+    this.#loadFromStorage();
   }
 
-  loadFromStorage() {
+  /**************************************
+   * PRIVATE METHODS
+   **************************************/
+  // Similar to private properties, private methods are only accessible within the class
+  // We made loadFromStorage() a private method by adding a # in front of the method name
+  #loadFromStorage() {
     // 'this' keyword gives us the object that contains the method (the "outer" object, in this case the cart object on line 6)
-    this.cartItems = JSON.parse(localStorage.getItem(this.localStorageKey));
+    this.cartItems = JSON.parse(localStorage.getItem(this.#localStorageKey));
 
     // If there's no cart in local storage (i.e. the cart is empty), we'll give the cart a default value below
     if (!this.cartItems) {
@@ -49,7 +60,7 @@ class Cart {
     // setItem() method stores the data in the local storage
     // Remember that local storage can only store strings! So we need to convert our cart array to a string using JSON.stringify()
     // setItem() takes 2 strings: the name of whatever we want to save, and the data that we want to save
-    localStorage.setItem(this.localStorageKey, JSON.stringify(this.cartItems));
+    localStorage.setItem(this.#localStorageKey, JSON.stringify(this.cartItems));
   }
 
   addToCart(productId) {
