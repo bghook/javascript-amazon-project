@@ -93,9 +93,45 @@ class Clothing extends Product {
   }
 }
 
+/*
+const date = new Date();
+console.log(date);
+console.log(date.toLocaleTimeString());
+*/
+
+/**************************************
+ * 'THIS' KEYWORD
+ **************************************/
+// Remember that 'this' refers to the current object (or "outer" object from where it's called)
+// However, be careful with situations like the following:
+//  - You might think this.a would refer to object2.a, but object2 has not been created yet, so this.a will be undefined!
+//  - 'this' will work when inside a method of an object, but if we're outside of a method, there's no object to point to, so 'this' will be undefined
+// const object2 = {
+//   a: 2,
+//   b: this.a,
+// }
+//
+// Another example is a function that is not inside an object - 'this' will also be undefined in this case
+// function logThis() {
+//   console.log(this); // Output: undefined
+// }
+// logThis();
+//
+// Note that arrow functions do NOT change the value of 'this'
+// Arrow functions do not have their own 'this' value - they inherit 'this' from the parent scope
+// In the example below, we're inside a method of object3, so you might think 'this' would refer to object3
+//  - However, arrow functions do NOT change the value of 'this', so 'this' is actually undefined below
+// With arrow functions, 'this' keeps the value that it had outside of the arrow function
+// const object3 = {
+//   method: () => {
+//     console.log(this); // Output: undefined
+//   },
+// };
+
 // We'll use the array method map() to convert each product object in the array into an instance of the Product class
 // The map() method creates a NEW array populated with the results of calling a provided function on every element in the calling array
 // The parameter passed into map() is the current product object
+/*
 export const products = [
   {
     id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
@@ -577,3 +613,50 @@ export const products = [
   // Don't forget that map() creates a new array, so we need a return statement
   return new Product(productDetails);
 });
+*/
+
+/**************************************
+ * LOADING DATA FROM THE BACKEND
+ **************************************/
+// Instead of loading the products from a local array as above, we can load the products from the backend
+// We'll use the XMLHttpRequest class to send a GET request to the backend
+// The backend will respond with a JSON object containing the product data
+// We'll convert the JSON object into an array of Product objects
+// We'll then export the products array so we can use it in other files
+
+export let products = [];
+
+/**************************************
+ * CALLBACK FUNCTIONS
+ **************************************/
+// The loadProducts function takes a function as a parameter (a callback function) and calls that function when the data is loaded
+// A callback function is one that will be called in the future (usually after some asynchronous operation has completed)
+// This is a common pattern in JavaScript for handling asynchronous operations
+export function loadProducts(fun) {
+  const xhr = new XMLHttpRequest(); // Generate a new request object
+
+  // Listen for the 'load' event to know when the backend has responded
+  xhr.addEventListener("load", () => {
+    // Convert the JSON response into an array of JavaScript objects (Products) using JSON.parse()
+    // Next, we use the code from above to transform each object into an instance of the Product class
+    // We can access the response via the 'response' property of the xhr object for the parameter of the JSON.parse() method
+    products = JSON.parse(xhr.response).map((productDetails) => {
+      if (productDetails.type === "clothing") {
+        // If the product is of type clothing, we'll create an instance of the Clothing class rather than the Product class
+        return new Clothing(productDetails);
+      }
+
+      // Convert the object into an instance of the Product class
+      // Don't forget that map() creates a new array, so we need a return statement
+      return new Product(productDetails);
+    });
+
+    console.log("Load products");
+
+    // Call the function that was passed in as a parameter AFTER waiting for the backend to respond above
+    fun();
+  }); // 2 params: the event to listen for, and the function to run when the event occurs
+
+  xhr.open("GET", "https://supersimplebackend.dev/products"); // 2 params: the type of request, and the URL to send the request to
+  xhr.send(); // Send the request to the backend; remember that this is an asynchronous operation! It will send the request but will not wait to receive a response, so we need the listener above
+}
