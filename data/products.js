@@ -45,6 +45,52 @@ class Product {
   getPrice() {
     return `$${formatCurrency(this.priceCents)}`;
   }
+
+  extraInfoHTML() {
+    // For regular products, we don't have any extra info we want to display, so we just return an empty string
+    return "";
+  }
+}
+
+/**************************************
+ * INHERITANCE
+ **************************************/
+// Inheritance is a principle of OOP that we use when we want to create a new class that is a more specific type of an existing class
+// Inheritance enhances reusability by allowing us to reuse code between related classes
+// To create a new class that inherits all the properties and methods from a parent class, we use the EXTENDS keyword
+
+class Clothing extends Product {
+  // Clothing is just a specific type of Product
+  // So it should have all the properties and methods of a Product, in addition to its own unique properties and methods
+  sizeChartLink;
+
+  constructor(productDetails) {
+    // Inheritance gives us a shortcut to access the constructor of the parent class so we can initialize the inherited properties
+    // The keyword 'super' will call the constructor of the parent class (Product) to initialize the inherited properties
+    // Note that if we don't create a constructor for the child class, the parent class's constructor will be called by default
+    super(productDetails); // This will call the constructor of the parent class (Product)
+    this.sizeChartLink = productDetails.sizeChartLink;
+  }
+
+  /**************************************
+   * METHOD OVERRIDING
+   **************************************/
+  // Method overriding is a principle of OOP that allows us to change the behavior of a method in a child class
+  // We can override a method by defining a new method with the same name in the child class
+  extraInfoHTML() {
+    // This method will generate some HTML that contains some extra info about this product (i.e. the size chat)
+    // The link element <a> has 2 attributes - href and target
+    // The href attribute specifies the URL of the page the link goes to
+    // The target attribute specifies where to open the linked document - _blank opens the link in a new tab
+    return `
+      <a href="${this.sizeChartLink}" target="_blank">
+        Size chart
+      </a>
+    `;
+
+    // Example: If we wanted to access the parent class's extraInfoHTML method, we can use the super keyword
+    // super.extraInfoHTML();
+  }
 }
 
 // We'll use the array method map() to convert each product object in the array into an instance of the Product class
@@ -522,6 +568,11 @@ export const products = [
     keywords: ["sweaters", "hoodies", "apparel", "mens"],
   },
 ].map((productDetails) => {
+  if (productDetails.type === "clothing") {
+    // If the product is of type clothing, we'll create an instance of the Clothing class rather than the Product class
+    return new Clothing(productDetails);
+  }
+
   // Convert the object into an instance of the Product class
   // Don't forget that map() creates a new array, so we need a return statement
   return new Product(productDetails);
