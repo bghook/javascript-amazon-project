@@ -6,6 +6,51 @@ import { loadCart } from "../data/cart.js";
 // import "../data/backend-practice.js";
 
 /**************************************
+ * ASYNC/AWAIT
+ **************************************/
+// Async/await is a newer way to write asynchronous code in JavaScript and is built on top of promises
+//  - Async/await can ONLY be used with promises - it doesn't do anything with a callback
+// Async/await makes our code easier to read and write - it's a shortcut for writing promises
+// Async/await is considered best practice to use over promises and callbacks
+// The async keyword makes a function return a promise
+// The reason we use async is because it allows us to use the second feature: await
+// The await keyword makes JavaScript wait for a promise to finish before going to the next line
+//  - await lets us write asynchronous code like normal (synchronous) code
+//  - We don't have to bother with any more .then() - we can just write it like normal code
+// IMPORTANT NOTE: We can only use await INSIDE an async function!
+
+// 3 steps for this loadPage() function:
+//  1. Load the products
+//  2. Load the cart
+//  3. Render the page
+async function loadPage() {
+  await loadProductsFetch(); // The await keyword will wait for this line to finish and get the response from the backend before moving to the next line
+
+  // Load the cart with a promise
+  // We want this line to finish before moving to the next line, so we use await
+  await new Promise((resolve) => {
+    loadCart(() => {
+      resolve();
+    });
+  });
+
+  renderOrderSummary();
+  renderPaymentSummary();
+
+  // Another thing to note about await - if resolve is called with a value, that value will be returned by the await line itself rather than in the next .then() function as with promises
+  // This makes our code easier to read and write
+  // Example below:
+  // const value = await new Promise(() => {
+  //   loadCart(() => {
+  //     resolve("value3");
+  //   })
+  // })
+  // console.log(value); // This will log "value3"
+}
+// Because loadPage is an async function, it returns a promise - we could use .then() directly on loadPage() to run code after the promise has resolved if we wanted
+loadPage();
+
+/**************************************
  * PROMISES
  **************************************/
 // A promise is an object that represents the eventual completion (or failure) of an asynchronous operation
@@ -56,21 +101,21 @@ import { loadCart } from "../data/cart.js";
 // Promise.all()
 //  - Lets us run multiple promises at the same time and wait for ALL of them to finish
 // Stores multiple promises in an array and waits for all of them to resolve
-Promise.all([
-  // loadProductsFetch returns a promise, so all we need to do is include the function in the array
-  loadProductsFetch(),
-  new Promise((resolve) => {
-    loadCart(() => {
-      resolve();
-    });
-  }),
-]).then((values) => {
-  console.log(values); // This will log ["value1", undefined] (can pass data between promises this way)
-  // After loading the products and cart, the third step is to render the page (order summary and payment summary)
-  // This function will run after the second promise has resolved
-  renderOrderSummary();
-  renderPaymentSummary();
-});
+// Promise.all([
+//   // loadProductsFetch returns a promise, so all we need to do is include the function in the array
+//   loadProductsFetch(),
+//   new Promise((resolve) => {
+//     loadCart(() => {
+//       resolve();
+//     });
+//   }),
+// ]).then((values) => {
+//   console.log(values); // This will log ["value1", undefined] (can pass data between promises this way)
+//   // After loading the products and cart, the third step is to render the page (order summary and payment summary)
+//   // This function will run after the second promise has resolved
+//   renderOrderSummary();
+//   renderPaymentSummary();
+// });
 
 /**************************************
  * USING THE BACKEND IN OUR PROJECT
