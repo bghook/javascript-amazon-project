@@ -1,6 +1,6 @@
 import { renderOrderSummary } from "../../scripts/checkout/orderSummary.js";
 import { loadFromStorage, cart, resetCart } from "../../data/cart.js";
-import { loadProducts } from "../../data/products.js";
+import { loadProducts, loadProductsFetch } from "../../data/products.js";
 
 // renderOrderSummary updates the checkout page
 // So there are 2 things we'll want to test:
@@ -26,7 +26,7 @@ describe("Test Suite: renderOrderSummary", () => {
   // When we add it as a parameter to the beforeAll hook, Jasmine will wait for done() to be called before continuing the tests
   beforeAll((done) => {
     // Load products before all tests
-    loadProducts(() => {
+    loadProductsFetch().then(() => {
       done();
     });
   });

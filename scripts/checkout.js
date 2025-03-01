@@ -1,6 +1,6 @@
 import { renderOrderSummary } from "./checkout/orderSummary.js";
 import { renderPaymentSummary } from "./checkout/paymentSummary.js";
-import { loadProducts } from "../data/products.js";
+import { loadProducts, loadProductsFetch } from "../data/products.js";
 import { loadCart } from "../data/cart.js";
 // import "../data/cart-class.js"; // This is another syntax we can use for importing modules - it runs the code in the cart-oop.js file without importing anything
 // import "../data/backend-practice.js";
@@ -57,14 +57,8 @@ import { loadCart } from "../data/cart.js";
 //  - Lets us run multiple promises at the same time and wait for ALL of them to finish
 // Stores multiple promises in an array and waits for all of them to resolve
 Promise.all([
-  new Promise((resolve) => {
-    // Lets add some asynchronous code here, such as the loadProducts function
-    // We can then call resolve() when the asynchronous code has completed
-    loadProducts(() => {
-      // This callback function will run after loadProducts has completed
-      resolve("value1"); // This tells the promise that the asynchronous operation has completed
-    });
-  }),
+  // loadProductsFetch returns a promise, so all we need to do is include the function in the array
+  loadProductsFetch(),
   new Promise((resolve) => {
     loadCart(() => {
       resolve();

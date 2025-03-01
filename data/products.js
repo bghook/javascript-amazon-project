@@ -627,6 +627,49 @@ export const products = [
 export let products = [];
 
 /**************************************
+ * FETCH
+ **************************************/
+// fetch() is a better way to make HTTP requests - it's a built-in JavaScript function that makes it easy to send and receive data from the server
+// XMLHttpRequest is an older way to make HTTP requests which uses callbacks
+// fetch() makes an HTTP request and gets a response using Promises, which are a newer way to handle asynchronous operations
+// fetch will save the response in a parameter (response) that we can access in the then() function
+export function loadProductsFetch() {
+  // Calling fetch creates a Promise object - we can call then() on it
+  // 1 param: the URL to send the request to
+  const promise = fetch("https://supersimplebackend.dev/products")
+    .then((response) => {
+      // The json() method gives us the JSON data that is attached to the response (in this case, our products data)
+      // json() is ASYNCHRONOUS - it returns a Promise, so we need to wait for it to resolve before continuing to the next step
+      // To solve this: remember that we can return another Promise from the then() function
+      // Since response.json() is a Promise, we can return it from the then() function
+      // When we return a promise, JavaScript will wait for that promise to finish before moving on to the next step
+      return response.json();
+    })
+    .then((productsData) => {
+      // When the response.json() Promise resolves, it will store the data in the parameter of the next then() function (productsData in this case)
+      // Note that fetch automatically converts the JSON response into a JavaScript object, so we don't have to use JSON.parse() to convert it into an object like we did with XMLHttpRequest
+      products = productsData.map((productDetails) => {
+        if (productDetails.type === "clothing") {
+          // If the product is of type clothing, we'll create an instance of the Clothing class rather than the Product class
+          return new Clothing(productDetails);
+        }
+
+        // Convert the object into an instance of the Product class
+        // Don't forget that map() creates a new array, so we need a return statement
+        return new Product(productDetails);
+      });
+
+      console.log("Load products");
+    });
+
+  return promise; // NOTE that we're returning the promise at the end of the function - this allows us to add more steps to the promise outside of this function
+}
+// loadProductsFetch().then(() => {
+//   // After all promises above are resolved (all products are loaded), we can execute this code
+//   console.log("Next step");
+// });
+
+/**************************************
  * CALLBACK FUNCTIONS
  **************************************/
 // The loadProducts function takes a function as a parameter (a callback function) and calls that function when the data is loaded
