@@ -120,3 +120,19 @@ export function updateDeliveryOption(productId, deliveryOptionId) {
   // Since we updated the cart, we need to save it to local storage
   saveToStorage();
 }
+
+// Load the cart from the backend
+export function loadCart(fun) {
+  const xhr = new XMLHttpRequest(); // Generate a new request object
+
+  // Listen for the 'load' event to know when the backend has responded
+  xhr.addEventListener("load", () => {
+    console.log(xhr.response);
+
+    // Call the function that was passed in as a parameter AFTER waiting for the backend to respond above
+    fun();
+  }); // 2 params: the event to listen for, and the function to run when the event occurs
+
+  xhr.open("GET", "https://supersimplebackend.dev/cart"); // 2 params: the type of request, and the URL to send the request to
+  xhr.send(); // Send the request to the backend; remember that this is an asynchronous operation! It will send the request but will not wait to receive a response, so we need the listener above
+}
