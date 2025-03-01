@@ -18,21 +18,36 @@ import { loadCart } from "../data/cart.js";
 //  - await lets us write asynchronous code like normal (synchronous) code
 //  - We don't have to bother with any more .then() - we can just write it like normal code
 // IMPORTANT NOTE: We can only use await INSIDE an async function!
+/**************************************
+ * ASYNC/AWAIT - ERROR HANDLING
+ **************************************/
+// Error handling with async/await: we can use try/catch blocks to handle errors
+// IMPORTANT NOTE: As soon as we get an error, it will skip the rest of the code and go straight to the catch block
+// Why don't we just use try/catch blocks everywhere?
+//  - Try/catch is meant to handle unexpected errors (i.e. the code is correct but something outside of our control went wrong)
+// We can also manually create errors using the throw keyword
+//  - This is useful for when we want to stop the code from running and handle the error ourselves
 
 // 3 steps for this loadPage() function:
 //  1. Load the products
 //  2. Load the cart
 //  3. Render the page
 async function loadPage() {
-  await loadProductsFetch(); // The await keyword will wait for this line to finish and get the response from the backend before moving to the next line
+  try {
+    // throw "Error 1"; // This will skip the rest of the code and go straight to the catch block, saving the value "Error 1" in the error variable
 
-  // Load the cart with a promise
-  // We want this line to finish before moving to the next line, so we use await
-  await new Promise((resolve) => {
-    loadCart(() => {
-      resolve();
+    await loadProductsFetch(); // The await keyword will wait for this line to finish and get the response from the backend before moving to the next line
+
+    // Load the cart with a promise
+    // We want this line to finish before moving to the next line, so we use await
+    await new Promise((resolve) => {
+      loadCart(() => {
+        resolve();
+      });
     });
-  });
+  } catch (error) {
+    console.log("Unexpected error. Please try again later.");
+  }
 
   renderOrderSummary();
   renderPaymentSummary();

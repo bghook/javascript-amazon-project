@@ -660,6 +660,12 @@ export function loadProductsFetch() {
       });
 
       console.log("Load products");
+    })
+    .catch(() => {
+      // To handle errors with promises, we can use the catch() method (could be chained to the end of the then() method)
+      // The catch() method will run if there is an error in the promise chain
+      // Just like callbacks, .catch() gets a parameter called error that contains info about the error if we need it
+      console.log("Unexpected error. Please try again later.");
     });
 
   return promise; // NOTE that we're returning the promise at the end of the function - this allows us to add more steps to the promise outside of this function
@@ -699,6 +705,11 @@ export function loadProducts(fun) {
     // Call the function that was passed in as a parameter AFTER waiting for the backend to respond above
     fun();
   }); // 2 params: the event to listen for, and the function to run when the event occurs
+
+  // Error handling with callbacks - we usually set up a separate callback just for errors
+  xhr.addEventListener("error", (error) => {
+    console.log("Unexpected error. Please try again later.");
+  });
 
   xhr.open("GET", "https://supersimplebackend.dev/products"); // 2 params: the type of request, and the URL to send the request to
   xhr.send(); // Send the request to the backend; remember that this is an asynchronous operation! It will send the request but will not wait to receive a response, so we need the listener above
